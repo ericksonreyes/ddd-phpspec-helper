@@ -1,0 +1,29 @@
+{
+  "name": "ericksonreyes/ddd-phpspec-helper",
+  "description": "PHPSpec helper for creating Domain Driven Design related classes and tests.",
+  "license": "MIT",
+  "type": "library",
+  "require": {
+    "php": ">=7.2",
+    "ext-json": "*",
+    "phpspec/phpspec": "^5.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "DDDHelper\\": "src/DDDHelper"
+    },
+    "psr-0": {
+      "": [
+        "src"
+      ]
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "bin-dir": "bin"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

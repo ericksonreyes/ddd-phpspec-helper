@@ -1,0 +1,4 @@
+formatter.name: pretty
+stop_on_failure: true
+extensions:
+  DDDHelper\SpecGen\DomainCodeGenerator: ~

@@ -1,0 +1,57 @@
+<?php
+namespace %src_namespace%;
+
+use Knit\Shared\EventSourcedEntity;
+use InvalidArgumentException;
+
+/**
+ * Class %src_class%
+ * @package %src_namespace%
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
+class %src_class% extends EventSourcedEntity
+{
+    /**
+     * @var string
+     */
+    private $id;
+
+    %src_fields%
+
+    /**
+     * %src_class% constructor.
+     *
+     * @param string $id
+     * @return %src_class%
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(string $id)
+    {
+        if (trim($id) === '') {
+            throw new InvalidArgumentException();
+        }
+        $this->id = $id;
+    }
+
+    /**
+    * @return string
+    */
+    public function id(): string
+    {
+        return $this->id;
+    }
+
+    /**
+    * @return bool
+    */
+    public function isDeleted(): bool
+    {
+        return false;
+    }
+    %src_nullable_getters%
+}

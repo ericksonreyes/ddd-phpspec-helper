@@ -1,0 +1,97 @@
+<?php
+namespace %spec_namespace%;
+
+use Knit\Shared\DomainEvent;
+use %src_full_qualified_class_name%;
+use DateTimeImmutable;
+use Faker\Factory;
+use Faker\Generator;
+use PhpSpec\ObjectBehavior;
+
+class %spec_class% extends ObjectBehavior
+{
+    /**
+     * @var Generator
+     */
+    protected $seeder;
+
+    /**
+    * @var string
+    */
+    protected $expectedRaisedBy;
+
+    /**
+    * @var string
+    */
+    protected $expectedEntityId;
+
+    %spec_fields%
+
+    public function __construct()
+    {
+        $this->seeder = Factory::create();
+    }
+
+
+    public function let()
+    {
+        $this->beConstructedThrough('raise', [
+            $this->expectedRaisedBy = $this->seeder->uuid,
+            $this->expectedEntityId = $this->seeder->uuid,%spec_constructor_fields%
+        ]);
+    }
+
+    public function it_is_initializable()
+    {
+        $this->shouldHaveType(%src_class%::class);
+        $this->shouldHaveType(DomainEvent::class);
+    }
+
+    public function it_has_entity_id()
+    {
+        $this->entityId()->shouldReturn($this->expectedEntityId);
+    }
+
+    public function it_has_entity_details()
+    {
+        $this::staticEntityContext()->shouldReturn('%context%');
+        $this::staticEntityType()->shouldReturn('%entity%');
+        $this->entityContext()->shouldReturn('%context%');
+        $this->entityType()->shouldReturn('%entity%');
+    }
+
+    public function it_has_event_date()
+    {
+        $this->happenedOn()->shouldHaveType(DateTimeImmutable::class);
+    }
+
+    public function it_has_event_name()
+    {
+        $this::staticEventName()->shouldReturn('%event_name%');
+        $this->eventName()->shouldReturn('%event_name%');
+    }
+
+    %spec_getter_tests%
+
+    public function it_has_array_representation()
+    {
+        $this->toArray()->shouldBeArray();
+    }
+
+    public function it_can_be_restored_from_array()
+    {
+        $array = [
+            'happenedOn' => time(),
+            'data' => [
+                'raisedBy' => $expectedRaisedBy = $this->seeder->uuid,
+                'entityId' => $expectedEntityId = $this->seeder->uuid,%spec_data_array%
+            ]
+        ];
+
+        self::fromArray($array)->shouldHaveType(%src_class%::class);
+        self::fromArray($array)->happenedOn()->shouldHaveType(DateTimeImmutable::class);
+        self::fromArray($array)->entityId()->shouldReturn($expectedEntityId);
+        %spec_data_test%
+    }
+
+}

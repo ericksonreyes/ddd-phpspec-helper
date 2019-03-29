@@ -1,0 +1,163 @@
+<?php
+
+namespace %src_namespace%;
+
+use DateTimeImmutable;
+use Knit\Shared\DomainEvent;
+
+/**
+ * Class %src_class%
+ * @package %src_namespace%
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
+class %src_class% implements DomainEvent
+{
+
+    /**
+    * @var string
+    */
+    protected $raisedBy;
+
+    /**
+    * @var string
+    */
+    protected $entityId;
+
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $happenedOn;
+
+    %src_fields%
+
+    /**
+     * %src_class% constructor.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * @param string $raisedBy
+     * @param string $entityId %src_constructor_docs%
+     * @return %src_class%
+     * @throws \Exception
+     */
+    public static function raise(
+        string $raisedBy,
+        string $entityId, %src_constructor_fields%
+    ): self {
+        $event = new static();
+
+        $event->happenedOn = new DateTimeImmutable();
+        $event->raisedBy = $raisedBy;
+        $event->entityId = $entityId; %src_constructor_initialization%
+
+        return $event;
+    }
+
+    /**
+     * @return string
+     */
+    public static function staticEntityContext(): string
+    {
+        return '%context%';
+    }
+
+    /**
+     * @return string
+     */
+    public static function staticEntityType(): string
+    {
+        return '%entity%';
+    }
+
+
+    /**
+     * @return string
+     */
+    public function eventName(): string
+    {
+        return static::staticEventName();
+    }
+
+    /**
+     * @return string
+     */
+    public function entityContext(): string
+    {
+        return static::staticEntityContext();
+    }
+
+    /**
+     * @return string
+     */
+    public function entityType(): string
+    {
+        return static::staticEntityType();
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function happenedOn(): DateTimeImmutable
+    {
+        return $this->happenedOn;
+    }
+
+    /**
+     * @return string
+     */
+    public function raisedBy(): string
+    {
+        return $this->raisedBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function entityId(): string
+    {
+        return $this->entityId;
+    }
+
+    /**
+     * @return string
+     */
+    public static function staticEventName(): string
+    {
+        return '%event_name%';
+    }
+    %src_getters%
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'eventName' => $this->eventName(),
+            'happenedOn' => $this->happenedOn()->getTimestamp(),
+            'entityType' => $this->entityType(),
+            'entityId' => $this->entityId(),
+            'data' => [
+                'raisedBy' => $this->raisedBy(),
+                'entityId' => $this->entityId(), %src_data_to_array%
+            ]
+        ];
+    }
+
+    /**
+     * @param array $array
+     * @return DomainEvent
+     */
+    public static function fromArray(array $array): DomainEvent
+    {
+        $event = new static();
+        $event->happenedOn = DateTimeImmutable::createFromFormat('U', (string)$array['happenedOn']);
+        $event->raisedBy = $array['data']['raisedBy'];
+        $event->entityId = $array['data']['entityId']; %src_array_to_data%
+        return $event;
+    }
+}
