@@ -36,9 +36,9 @@ trait CreationHelper
 
         $arguments = [
             'name' => $classname,
-            'type' => 'event',
+            'type' => $this->getName(),
         ];
         $arguments = $this->makeEventArguments($input, $output, $arguments);
-        $container->get('code_generator')->generate($resource, 'event_generator', $arguments);
+        $container->get('code_generator')->generate($resource, $this->getName() . '_generator', $arguments);
     }
 }

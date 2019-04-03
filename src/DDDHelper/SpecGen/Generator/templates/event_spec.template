@@ -1,7 +1,7 @@
 <?php
 namespace %spec_namespace%;
 
-use Knit\Shared\DomainEvent;
+use EricksonReyes\DomainDrivenDesign\Domain\Event;
 use %src_full_qualified_class_name%;
 use DateTimeImmutable;
 use Faker\Factory;
@@ -44,7 +44,7 @@ class %spec_class% extends ObjectBehavior
     public function it_is_initializable()
     {
         $this->shouldHaveType(%src_class%::class);
-        $this->shouldHaveType(DomainEvent::class);
+        $this->shouldHaveType(Event::class);
     }
 
     public function it_has_entity_id()

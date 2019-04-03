@@ -5,9 +5,11 @@
   "type": "library",
   "require": {
     "php": ">=7.2",
+    "ericksonreyes/domain-driven-design": "v1.*",
     "ext-json": "*"
   },
   "require-dev": {
+    "fzaninotto/faker": "~1.4",
     "phpspec/phpspec": "^4.0"
   },
   "autoload": {

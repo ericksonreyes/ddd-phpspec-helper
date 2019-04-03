@@ -33,28 +33,6 @@ class CreateEntity extends Command
      */
     protected function makeEventArguments(InputInterface $input, OutputInterface $output, array $arguments): array
     {
-        while (true) {
-            $arguments['entity'] = $this->ask(
-                $input,
-                $output,
-                'Enter entity name (Ex.: User, Product, Order): '
-            );
-            if ($arguments['entity']) {
-                break;
-            }
-        }
-
-        while (true) {
-            $arguments['context'] = $this->ask(
-                $input,
-                $output,
-                'Enter context name (Ex.: Sales, Security, Inventory): '
-            );
-            if ($arguments['context']) {
-                break;
-            }
-        }
-
         for (;;) {
             $propertyName = $this->ask(
                 $input,

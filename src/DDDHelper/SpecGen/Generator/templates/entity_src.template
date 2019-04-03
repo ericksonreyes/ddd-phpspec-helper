@@ -1,7 +1,8 @@
 <?php
 namespace %src_namespace%;
 
-use Knit\Shared\EventSourcedEntity;
+use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
+use EricksonReyes\DomainDrivenDesign\EventSourcedEntity;
 use InvalidArgumentException;
 
 /**
@@ -17,7 +18,7 @@ use InvalidArgumentException;
 class %src_class% extends EventSourcedEntity
 {
     /**
-     * @var string
+     * @var Identifier
      */
     private $id;
 
@@ -26,22 +27,22 @@ class %src_class% extends EventSourcedEntity
     /**
      * %src_class% constructor.
      *
-     * @param string $id
+     * @param Identifier $id
      * @return %src_class%
      * @throws \InvalidArgumentException
      */
-    public function __construct(string $id)
+    public function __construct(Identifier $id)
     {
-        if (trim($id) === '') {
-            throw new InvalidArgumentException();
+        if (trim($id->value()) === '') {
+            throw new InvalidArgumentException('Entity id must not be empty.');
         }
         $this->id = $id;
     }
 
     /**
-    * @return string
+    * @return Identifier
     */
-    public function id(): string
+    public function id(): Identifier
     {
         return $this->id;
     }

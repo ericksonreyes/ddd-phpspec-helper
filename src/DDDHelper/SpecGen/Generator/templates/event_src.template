@@ -3,7 +3,7 @@
 namespace %src_namespace%;
 
 use DateTimeImmutable;
-use Knit\Shared\DomainEvent;
+use EricksonReyes\DomainDrivenDesign\Domain\Event;
 
 /**
  * Class %src_class%
@@ -11,7 +11,7 @@ use Knit\Shared\DomainEvent;
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class %src_class% implements DomainEvent
+class %src_class% implements Event
 {
 
     /**
@@ -152,7 +152,7 @@ class %src_class% implements DomainEvent
      * @param array $array
      * @return DomainEvent
      */
-    public static function fromArray(array $array): DomainEvent
+    public static function fromArray(array $array): Event
     {
         $event = new static();
         $event->happenedOn = DateTimeImmutable::createFromFormat('U', (string)$array['happenedOn']);
