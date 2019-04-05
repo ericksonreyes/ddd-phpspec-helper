@@ -2,9 +2,9 @@
 
 namespace DDDHelper\SpecGen\Generator;
 
-use PhpSpec\Locator\Resource;
 use PhpSpec\CodeGenerator\TemplateRenderer;
 use PhpSpec\Console\ConsoleIO;
+use PhpSpec\Locator\Resource;
 use PhpSpec\Util\Filesystem;
 
 trait GeneratorHelper
@@ -56,6 +56,7 @@ trait GeneratorHelper
                 '%src_class%' => $resource->getName(),
                 '%src_constructor_fields%' => $this->generateSrcConstructorDependencies($data),
                 '%src_constructor_initialization%' => $this->generateSrcConstructorInitialization($data),
+                '%src_dto_constructor_initialization%' => $this->generateSrcDtoConstructorInitialization($data),
                 '%src_constructor_docs%' => $this->generateSrcConstructorDocumentation($data),
                 '%src_getters%' => $this->generateSrcGetters($data),
                 '%src_nullable_getters%' => $this->generateSrcNullableGetters($data),
@@ -82,6 +83,14 @@ trait GeneratorHelper
 
 
         $this->informExampleAdded($resource, $class);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority(): int
+    {
+        return 0;
     }
 
     /**
@@ -162,7 +171,6 @@ trait GeneratorHelper
         return implode("\n\t\t", $eventDataTest);
     }
 
-
     /**
      * @param array $data
      * @return string
@@ -186,7 +194,6 @@ trait GeneratorHelper
         }
         return implode("\n", $eventDataTest);
     }
-
 
     /**
      * @param array $data
@@ -215,7 +222,6 @@ trait GeneratorHelper
         return implode("\n", $eventDataTest);
     }
 
-
     /**
      * @param array $data
      * @return string
@@ -243,7 +249,6 @@ trait GeneratorHelper
         return implode("\n", $eventDataTest);
     }
 
-
     /**
      * @param array $data
      * @return array|string
@@ -264,7 +269,6 @@ trait GeneratorHelper
         }
         return implode("\n\t", $eventFields);
     }
-
 
     /**
      * @param array $data
@@ -371,6 +375,24 @@ trait GeneratorHelper
      * @param array $data
      * @return array|string
      */
+    protected function generateSrcDtoConstructorInitialization(array $data): string
+    {
+        if (!isset($data['fields'])) {
+            return '';
+        }
+
+        $constructorFields = [];
+        foreach ((array)$data['fields'] as $fieldName => $fieldType) {
+            $variableName = lcfirst(Cased::make($fieldName)->asCamelCase());
+            $constructorFields[] = "\n\t\t" . '$this->' . $variableName . ' = $' . $variableName . ';';
+        }
+        return implode('', $constructorFields);
+    }
+
+    /**
+     * @param array $data
+     * @return array|string
+     */
     protected function generateSrcConstructorDocumentation(array $data): string
     {
         if (!isset($data['fields'])) {
@@ -394,6 +416,8 @@ trait GeneratorHelper
         switch ($type) {
             case 'int':
                 return 'int';
+            case 'float':
+                return 'float';
             case 'array':
                 return 'array';
             case 'bool':
@@ -411,20 +435,14 @@ trait GeneratorHelper
         switch ($type) {
             case 'int':
                 return 'numberBetween(1, 100000)';
+            case 'float':
+                return 'randomFloat(2, 1, 100000)';
             case 'array':
                 return 'paragraphs';
             case 'bool':
                 return 'boolean';
         }
         return 'word';
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority(): int
-    {
-        return 0;
     }
 
     /**

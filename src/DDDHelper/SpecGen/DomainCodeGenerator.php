@@ -2,8 +2,10 @@
 
 namespace DDDHelper\SpecGen;
 
+use DDDHelper\SpecGen\Command\CreateCommand;
 use DDDHelper\SpecGen\Command\CreateEntity;
 use DDDHelper\SpecGen\Command\CreateEvent;
+use DDDHelper\SpecGen\Generator\DomainCommandGenerator;
 use DDDHelper\SpecGen\Generator\DomainEntityGenerator;
 use DDDHelper\SpecGen\Generator\DomainEventGenerator;
 use PhpSpec\Extension;
@@ -25,13 +27,20 @@ class DomainCodeGenerator implements Extension
             return new CreateEvent();
         }, ['console.commands']);
 
-
         $container->define('code_generator.generators.entity_generator', function (ServiceContainer $c) {
             return new DomainEntityGenerator($c->get('console.io'), $c->get('code_generator.templates'));
         }, ['code_generator.generators']);
 
         $container->define('console.commands.create.entity', function () {
             return new CreateEntity();
+        }, ['console.commands']);
+
+        $container->define('code_generator.generators.command_generator', function (ServiceContainer $c) {
+            return new DomainCommandGenerator($c->get('console.io'), $c->get('code_generator.templates'));
+        }, ['code_generator.generators']);
+
+        $container->define('console.commands.create.command', function () {
+            return new CreateCommand();
         }, ['console.commands']);
     }
 }
