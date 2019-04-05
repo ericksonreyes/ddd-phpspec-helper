@@ -1,0 +1,50 @@
+<?php
+namespace %src_namespace%;
+
+use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
+use InvalidArgumentException;
+
+/**
+ * Class %src_class%
+ * @package %src_namespace%
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
+class %src_class%
+{
+    /**
+     * @var Identifier
+     */
+    private $invoker;
+
+    %src_fields%
+
+    /**
+     * %src_class% constructor.
+     *
+     * @param Identifier $invoker %src_constructor_docs%
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(
+        Identifier $invoker, %src_constructor_fields%
+    ) {
+        if ($invoker->isEmpty()) {
+            throw new InvalidArgumentException('%src_class% invoker is required.');
+        }
+        $this->invoker = $invoker; %src_dto_constructor_initialization%
+    }
+
+    /**
+    * @return Identifier
+    */
+    public function invoker(): Identifier
+    {
+        return $this->invoker;
+    }
+
+    %src_getters%
+}

@@ -9,14 +9,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateEntity extends Command
+class CreateHandler extends Command
 {
     use CreationHelper, NotificationHelper;
 
     protected function configure()
     {
-        $this->setName('entity');
-        $this->setDescription('Creates a specification and implementation of a domain entity');
+        $this->setName('handler');
+        $this->setDescription('Creates a specification and implementation of an application command handler');
 
         $this->setDefinition(array(
             new InputArgument('class', InputArgument::REQUIRED, 'Class method belongs to'),
@@ -33,11 +33,22 @@ class CreateEntity extends Command
      */
     protected function makeEventArguments(InputInterface $input, OutputInterface $output, array $arguments): array
     {
+        while (true) {
+            $arguments['command'] = $this->ask(
+                $input,
+                $output,
+                'Enter command to be handled (Ex.: SignUpUser, CreateOrder, RemoveItem): '
+            );
+            if ($arguments['command']) {
+                break;
+            }
+        }
+
         for (; ;) {
             $propertyName = $this->ask(
                 $input,
                 $output,
-                'Enter additional entity data (Ex.: password, fullName, email): ',
+                'Enter handler dependency (Ex.: repository, mailerService, fileSystem): ',
                 ''
             );
             if ($propertyName === '') {

@@ -67,7 +67,7 @@ class CreateEvent extends Command
             }
         }
 
-        for (;;) {
+        for (; ;) {
             $propertyName = $this->ask(
                 $input,
                 $output,
@@ -85,6 +85,7 @@ class CreateEvent extends Command
                 [
                     'string',
                     'int',
+                    'float',
                     'array',
                     'bool'
                 ]
