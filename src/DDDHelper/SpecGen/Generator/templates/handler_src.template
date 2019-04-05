@@ -1,0 +1,43 @@
+<?php
+namespace %src_namespace%;
+
+use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
+use InvalidArgumentException;
+
+/**
+ * Class %src_class%
+ * @package %src_namespace%
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
+class %src_class%
+{
+
+    %src_fields%
+
+    /**
+     * %src_class% constructor.
+     * %src_constructor_docs%
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(
+        %src_constructor_fields%
+    ) {
+        %src_dto_constructor_initialization%
+    }
+
+
+    /**
+     * @param %command% $command
+     */
+    public function handleThis(%command% $command): void
+    {
+
+    }
+
+    %src_getters%
+}

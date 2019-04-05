@@ -1,0 +1,43 @@
+<?php
+namespace %spec_namespace%;
+
+use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
+use %src_full_qualified_class_name%;
+use Faker\Factory;
+use Faker\Generator;
+use PhpSpec\ObjectBehavior;
+use InvalidArgumentException;
+
+class %spec_class% extends ObjectBehavior
+{
+    /**
+     * @var Generator
+     */
+    protected $seeder;
+
+    %spec_fields%
+
+    public function __construct()
+    {
+        $this->seeder = Factory::create();
+    }
+
+    public function let(Identifier $invoker)
+    {
+        $this->beConstructedWith(
+            %spec_constructor_fields%
+        );
+    }
+
+    public function it_is_initializable()
+    {
+        $this->shouldHaveType(%src_class%::class);
+    }
+
+    public function it_handles_commands(%command% $command)
+    {
+        $this->handleThis($command)->shouldBeNull();
+    }
+
+    %spec_getter_tests%
+}

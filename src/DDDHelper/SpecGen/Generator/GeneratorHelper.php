@@ -34,6 +34,7 @@ trait GeneratorHelper
         $context = $data['context'] ?? '';
         $entity = $data['entity'] ?? '';
         $eventName = $data['event_name'] ?? '';
+        $command = $data['command'] ?? '';
         $class = new Cased($name);
         $templateVariables =
             [
@@ -62,7 +63,9 @@ trait GeneratorHelper
                 '%src_nullable_getters%' => $this->generateSrcNullableGetters($data),
                 '%src_data_to_array%' => $this->generateSrcDataToArray($data),
                 '%src_array_to_data%' => $this->generateSrcArrayToData($data),
-                '%src_fields%' => $this->generateSrcFields($data)
+                '%src_fields%' => $this->generateSrcFields($data),
+
+                '%command%' => ucfirst(Cased::make($command)->asCamelCase())
             ];
 
         $specBasePath = rtrim($resource->getSpecFilename(), $resource->getSpecName() . '.php');
