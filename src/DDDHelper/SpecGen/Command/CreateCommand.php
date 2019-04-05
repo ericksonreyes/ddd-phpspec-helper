@@ -37,7 +37,7 @@ class CreateCommand extends Command
             $propertyName = $this->ask(
                 $input,
                 $output,
-                'Enter command data (Ex.: password, fullName, email): ',
+                'Enter command data (Ex.: customerId, password, fullName, email): ',
                 ''
             );
             if ($propertyName === '') {
