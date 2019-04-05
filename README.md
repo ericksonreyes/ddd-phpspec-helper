@@ -19,4 +19,6 @@ composer require ericksonreyes/domain-driven-design
 ```bash
 bin/phpspec entity MyDomain/EntityName
 bin/phpspec event MyDomain/EventName
+bin/phpspec command MyApplication/Command/WipeFileSystem
+bin/phpspec handler MyApplication/Handler/WipeFileSystemHandler
 ```
