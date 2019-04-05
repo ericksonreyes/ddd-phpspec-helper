@@ -1,7 +1,6 @@
 <?php
 namespace %spec_namespace%;
 
-use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
 use %src_full_qualified_class_name%;
 use Faker\Factory;
 use Faker\Generator;
@@ -22,7 +21,7 @@ class %spec_class% extends ObjectBehavior
         $this->seeder = Factory::create();
     }
 
-    public function let(Identifier $invoker)
+    public function let()
     {
         $this->beConstructedWith(
             %spec_constructor_fields%
