@@ -1,7 +1,6 @@
 <?php
 namespace %spec_namespace%;
 
-use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
 use %src_full_qualified_class_name%;
 use Faker\Factory;
 use Faker\Generator;
@@ -16,7 +15,7 @@ class %spec_class% extends ObjectBehavior
     protected $seeder;
 
     /**
-    * @var Identifier
+    * @var string
     */
     protected $expectedInvoker;
 
@@ -27,9 +26,9 @@ class %spec_class% extends ObjectBehavior
         $this->seeder = Factory::create();
     }
 
-    public function let(Identifier $invoker)
+    public function let()
     {
-        $invoker->isEmpty()->shouldBeCalled()->willReturn(false);
+        $invoker = $this->seeder->uuid;
         $this->beConstructedWith(
             $this->expectedInvoker = $invoker, %spec_constructor_fields%
         );
@@ -40,9 +39,9 @@ class %spec_class% extends ObjectBehavior
         $this->shouldHaveType(%src_class%::class);
     }
 
-    public function it_requires_a_command_invoker(Identifier $invoker)
+    public function it_requires_a_command_invoker()
     {
-        $invoker->isEmpty()->shouldBeCalled()->willReturn(true);
+        $invoker = str_repeat(' ', mt_rand(1, 10));
         $this->shouldThrow(InvalidArgumentException::class)->during('__construct', [
             $invoker, %spec_constructor_fields%
         ]);

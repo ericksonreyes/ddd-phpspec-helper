@@ -1,7 +1,6 @@
 <?php
 namespace %src_namespace%;
 
-use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
 use InvalidArgumentException;
 
 /**
