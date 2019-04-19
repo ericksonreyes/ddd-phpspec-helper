@@ -265,7 +265,7 @@ trait GeneratorHelper
         $eventFields = [];
         foreach ((array)$data['fields'] as $fieldName => $fieldType) {
             $eventFields[] = '/**';
-            $eventFields[] = '/* @var ' . $this->getFieldType($fieldType);
+            $eventFields[] = '* @var ' . $this->getFieldType($fieldType);
             $eventFields[] = '*/';
             $eventFields[] = 'protected $expected' . Cased::make($fieldName)->asCamelCase() . ';';
             $eventFields[] = '';
