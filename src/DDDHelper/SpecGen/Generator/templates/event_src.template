@@ -150,7 +150,7 @@ class %src_class% implements Event
 
     /**
      * @param array $array
-     * @return DomainEvent
+     * @return Event
      */
     public static function fromArray(array $array): Event
     {
