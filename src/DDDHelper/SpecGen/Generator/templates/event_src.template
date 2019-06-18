@@ -46,7 +46,7 @@ class %src_class% implements Event
      */
     public static function raise(
         string $raisedBy,
-        string $entityId, %src_constructor_fields%
+        string $entityId%src_comma_prefixed_constructor_fields%
     ): self {
         $event = new static();
 

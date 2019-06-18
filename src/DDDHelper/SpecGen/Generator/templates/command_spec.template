@@ -30,7 +30,7 @@ class %spec_class% extends ObjectBehavior
     {
         $invoker = $this->seeder->uuid;
         $this->beConstructedWith(
-            $this->expectedInvoker = $invoker, %spec_constructor_fields%
+            $this->expectedInvoker = $invoker%src_comma_prefixed_constructor_fields%
         );
     }
 

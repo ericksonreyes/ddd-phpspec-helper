@@ -56,6 +56,7 @@ trait GeneratorHelper
                 '%src_full_qualified_class_name%' => $resource->getSrcClassname(),
                 '%src_class%' => $resource->getName(),
                 '%src_constructor_fields%' => $this->generateSrcConstructorDependencies($data),
+                '%src_comma_prefixed_constructor_fields%' => $this->generateCommaPrefixedSrcConstructorDependencies($data),
                 '%src_constructor_initialization%' => $this->generateSrcConstructorInitialization($data),
                 '%src_dto_constructor_initialization%' => $this->generateSrcDtoConstructorInitialization($data),
                 '%src_constructor_docs%' => $this->generateSrcConstructorDocumentation($data),
@@ -167,7 +168,7 @@ trait GeneratorHelper
 
         $eventDataTest = [];
         foreach ((array)$data['fields'] as $fieldName => $fieldType) {
-            $eventDataTest[] = 'self::fromArray($array)->'
+            $eventDataTest[] = '$this::fromArray($array)->'
                 . lcfirst(Cased::make($fieldName)->asCamelCase())
                 . '()->shouldReturn($expected' . Cased::make($fieldName)->asCamelCase() . ');';
         }
@@ -340,6 +341,30 @@ trait GeneratorHelper
      * @param array $data
      * @return array|string
      */
+    protected function generateCommaPrefixedSrcConstructorDependencies(array $data): string
+    {
+        if (!isset($data['fields'])) {
+            return '';
+        }
+
+        $constructorFields = [];
+        foreach ((array)$data['fields'] as $fieldName => $fieldType) {
+            $variableName = lcfirst(Cased::make($fieldName)->asCamelCase());
+            $constructorFields[] = "\n\t\t"
+                . $this->getFieldType($fieldType) .
+                ' $' . $variableName;
+        }
+
+        if (count($constructorFields) > 0) {
+            return ', ' . implode(', ', $constructorFields);
+        }
+        return '';
+    }
+
+    /**
+     * @param array $data
+     * @return array|string
+     */
     protected function generateSrcConstructorDependencies(array $data): string
     {
         if (!isset($data['fields'])) {
@@ -353,7 +378,8 @@ trait GeneratorHelper
                 . $this->getFieldType($fieldType) .
                 ' $' . $variableName;
         }
-        return implode(', ', $constructorFields);
+
+        return implode(', ', $constructorFields);;
     }
 
     /**
