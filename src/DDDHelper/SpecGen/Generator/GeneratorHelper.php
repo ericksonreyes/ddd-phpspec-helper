@@ -38,6 +38,7 @@ trait GeneratorHelper
         $eventName = $data['event_name'] ?? '';
         $command = $data['command'] ?? '';
         $class = new Cased($name);
+
         $templateVariables =
             [
                 '%event_name%' => Cased::make($eventName)->asCamelCase(),
@@ -312,8 +313,14 @@ trait GeneratorHelper
 
         $constructorFields = [];
         foreach ((array)$data['fields'] as $fieldName => $fieldType) {
+            $variableName = '$' . lcfirst(Cased::make($fieldName)->asCamelCase());
+            $memberVariableName = '$this->expected' . Cased::make($fieldName)->asCamelCase();
+
             if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
                 $this->additionalDependencies[] = $fieldType . ' $' . $fieldName;
+                $constructorFields[] = "\n\t\t\t"
+                    . $memberVariableName .
+                    ' = ' . $variableName;
                 continue;
             }
 
@@ -525,12 +532,17 @@ trait GeneratorHelper
 
     private function generateAdditionalDependencies(array $data): string
     {
-
         if (!isset($data['fields'])) {
             return '';
         }
 
         $additionalDependencies = [];
+        foreach ((array)$data['command'] as $fieldName => $fieldType) {
+            if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
+                $additionalDependencies[] = 'use ' . $fieldType . ';';
+            }
+        }
+
         foreach ((array)$data['fields'] as $fieldName => $fieldType) {
             if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
                 $additionalDependencies[] = 'use ' . $fieldType . ';';

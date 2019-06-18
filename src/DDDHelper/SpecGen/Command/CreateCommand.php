@@ -62,14 +62,16 @@ class CreateCommand extends Command
             $arguments['fields'][$propertyName] = $propertyType;
 
             if ($propertyType === 'class') {
-                $className = '';
-                while (trim($className) === '') {
+                while (true) {
                     $className = $this->ask($input, $output, 'Enter class or interface fully qualified name ' .
                         '(Ex.: MyVendor\\MyProject\\MyClass): ', '');
-                }
 
-                $className = str_replace('/', '\\', $className);
-                $arguments['fields'][$propertyName] = $className;
+                    if ($className) {
+                        $className = str_replace('/', '\\', $className);
+                        $arguments['fields'][$propertyName] = $className;
+                        break;
+                    }
+                }
             }
         }
         return $arguments;

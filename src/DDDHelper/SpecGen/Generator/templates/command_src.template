@@ -30,7 +30,7 @@ class %src_class%
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        Identifier $invoker%src_comma_prefixed_constructor_fields%
+        string $invoker%src_comma_prefixed_constructor_fields%
     ) {
         $invoker = trim($invoker);
         if ($invoker === '') {

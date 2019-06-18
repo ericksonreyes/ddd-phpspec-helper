@@ -37,9 +37,10 @@ class CreateHandler extends Command
             $arguments['command'] = $this->ask(
                 $input,
                 $output,
-                'Enter command to be handled (Ex.: SignUpUser, CreateOrder, RemoveItem): '
+                'Enter command to be handled (Ex.: MyVendor\\SignUpUser, CreateOrder, RemoveItem): '
             );
             if ($arguments['command']) {
+                $arguments['command'] = str_replace('/', '\\', $arguments['command']);
                 break;
             }
         }
@@ -64,10 +65,24 @@ class CreateHandler extends Command
                     'int',
                     'float',
                     'array',
-                    'bool'
+                    'bool',
+                    'class'
                 ]
             );
             $arguments['fields'][$propertyName] = $propertyType;
+
+            if ($propertyType === 'class') {
+                while (true) {
+                    $className = $this->ask($input, $output, 'Enter class or interface fully qualified name ' .
+                        '(Ex.: MyVendor\\MyProject\\MyClass): ', '');
+
+                    if ($className) {
+                        $className = str_replace('/', '\\', $className);
+                        $arguments['fields'][$propertyName] = $className;
+                        break;
+                    }
+                }
+            }
         }
         return $arguments;
     }

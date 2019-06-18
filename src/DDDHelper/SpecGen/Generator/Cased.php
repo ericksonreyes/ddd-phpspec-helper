@@ -20,12 +20,21 @@ class Cased
     }
 
     /**
+     * @param $string
+     * @return Cased
+     */
+    public static function make($string): self
+    {
+        return new self($string);
+    }
+
+    /**
      * @return string
      */
     public function asCamelCase(): string
     {
         $camelCasedString = '';
-        $alphaNumericString = preg_replace('/[^A-Za-z0-9 ]/', ' ', $this->string);
+        $alphaNumericString = preg_replace('/[^A-Za-z0-9\\/ ]i/', ' ', $this->string);
         $arrayOfStrings = explode(' ', $alphaNumericString);
 
         foreach ($arrayOfStrings as $string) {
@@ -37,7 +46,6 @@ class Cased
 
         return ucfirst($camelCasedString);
     }
-
 
     public function asSnakeCase(): string
     {
@@ -53,14 +61,5 @@ class Cased
         }
 
         return implode('_', $camelCasedStrings);
-    }
-
-    /**
-     * @param $string
-     * @return Cased
-     */
-    public static function make($string): self
-    {
-        return new self($string);
     }
 }
