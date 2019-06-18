@@ -30,7 +30,7 @@ class %src_class%
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        Identifier $invoker, %src_constructor_fields%
+        Identifier $invoker%src_comma_prefixed_constructor_fields%
     ) {
         if ($invoker->isEmpty()) {
             throw new InvalidArgumentException('%src_class% invoker is required.');

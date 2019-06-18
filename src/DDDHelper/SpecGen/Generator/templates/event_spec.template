@@ -88,9 +88,9 @@ class %spec_class% extends ObjectBehavior
             ]
         ];
 
-        self::fromArray($array)->shouldHaveType(%src_class%::class);
-        self::fromArray($array)->happenedOn()->shouldHaveType(DateTimeImmutable::class);
-        self::fromArray($array)->entityId()->shouldReturn($expectedEntityId);
+        $this::fromArray($array)->shouldHaveType(%src_class%::class);
+        $this::fromArray($array)->happenedOn()->shouldHaveType(DateTimeImmutable::class);
+        $this::fromArray($array)->entityId()->shouldReturn($expectedEntityId);
         %spec_data_test%
     }
 
