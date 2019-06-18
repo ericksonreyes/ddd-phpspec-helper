@@ -190,7 +190,7 @@ trait GeneratorHelper
             $eventDataTest[] .= '
     public function it_has_' . lcfirst(Cased::make($fieldName)->asCamelCase()) . '()
     {
-        return $this->' . lcfirst(Cased::make($fieldName)->asCamelCase())
+        $this->' . lcfirst(Cased::make($fieldName)->asCamelCase())
                 . '()->shouldReturn($this->expected'
                 . Cased::make($fieldName)->asCamelCase() . ');
     }
@@ -266,7 +266,7 @@ trait GeneratorHelper
         $eventFields = [];
         foreach ((array)$data['fields'] as $fieldName => $fieldType) {
             $eventFields[] = '/**';
-            $eventFields[] = '/* @var ' . $this->getFieldType($fieldType);
+            $eventFields[] = '* @var ' . $this->getFieldType($fieldType);
             $eventFields[] = '*/';
             $eventFields[] = 'protected $expected' . Cased::make($fieldName)->asCamelCase() . ';';
             $eventFields[] = '';

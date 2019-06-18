@@ -1,7 +1,6 @@
 <?php
 namespace %spec_namespace%;
 
-use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
 use EricksonReyes\DomainDrivenDesign\EventSourcedEntity;
 use %src_full_qualified_class_name%;
 use PhpSpec\Exception\Example\FailureException;
@@ -23,7 +22,7 @@ class %spec_class% extends ObjectBehavior
     protected $expectedRaisedBy;
 
     /**
-    * @var Identifier
+    * @var string
     */
     protected $expectedEntityId;
 
@@ -34,9 +33,9 @@ class %spec_class% extends ObjectBehavior
         $this->seeder = Factory::create();
     }
 
-    public function let(Identifier $identifier)
+    public function let()
     {
-        $identifier->value()->shouldBeCalled()->willReturn($this->seeder->uuid);
+        $identifier = $this->seeder->uuid;
         $this->beConstructedWith($this->expectedEntityId = $identifier);
         %spec_constructor_fields_semicolon_delimited%
     }
@@ -47,9 +46,9 @@ class %spec_class% extends ObjectBehavior
         $this->shouldHaveType(EventSourcedEntity::class);
     }
 
-    public function it_does_not_allow_empty_user_id(Identifier $identifier)
+    public function it_does_not_allow_empty_user_id()
     {
-        $identifier->value()->shouldBeCalled()->willReturn(str_repeat(' ', mt_rand(1, 10)));
+        $identifier = str_repeat(' ', mt_rand(1, 10));
         $this->shouldThrow(InvalidArgumentException::class)->during('__construct', [
             $identifier
         ]);

@@ -1,7 +1,6 @@
 <?php
 namespace %src_namespace%;
 
-use EricksonReyes\DomainDrivenDesign\Domain\ValueObject\Identifier;
 use InvalidArgumentException;
 
 /**
@@ -17,7 +16,7 @@ use InvalidArgumentException;
 class %src_class%
 {
     /**
-     * @var Identifier
+     * @var string
      */
     private $invoker;
 
@@ -26,22 +25,23 @@ class %src_class%
     /**
      * %src_class% constructor.
      *
-     * @param Identifier $invoker %src_constructor_docs%
+     * @param string $invoker %src_constructor_docs%
      * @throws \InvalidArgumentException
      */
     public function __construct(
         Identifier $invoker%src_comma_prefixed_constructor_fields%
     ) {
-        if ($invoker->isEmpty()) {
+        $invoker = trim($invoker);
+        if ($invoker === '') {
             throw new InvalidArgumentException('%src_class% invoker is required.');
         }
         $this->invoker = $invoker; %src_dto_constructor_initialization%
     }
 
     /**
-    * @return Identifier
+    * @return string
     */
-    public function invoker(): Identifier
+    public function invoker(): string
     {
         return $this->invoker;
     }
