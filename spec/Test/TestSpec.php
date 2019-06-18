@@ -1,14 +1,14 @@
 <?php
-namespace %spec_namespace%;
+namespace spec\Test;
 
-use %src_full_qualified_class_name%;
+use Test\Test;
 use Faker\Factory;
 use Faker\Generator;
 use PhpSpec\ObjectBehavior;
 use InvalidArgumentException;
-%additional_dependencies%
+use Vendor\Repository;
 
-class %spec_class% extends ObjectBehavior
+class TestSpec extends ObjectBehavior
 {
     /**
      * @var Generator
@@ -20,31 +20,43 @@ class %spec_class% extends ObjectBehavior
     */
     protected $expectedInvoker;
 
-    %spec_fields%
+    /**
+	* @var Vendor\Repository
+	*/
+	protected $expectedRepository;
+	
+	/**
+	* @var string
+	*/
+	protected $expectedName;
+	
 
     public function __construct()
     {
         $this->seeder = Factory::create();
     }
 
-    public function let(%spec_before_test_dependencies%)
+    public function let(Vendor\Repository $repository)
     {
         $invoker = $this->seeder->uuid;
         $this->beConstructedWith(
-            $this->expectedInvoker = $invoker%spec_comma_prefixed_constructor_fields%
+            $this->expectedInvoker = $invoker, 
+			$this->expectedRepository = $repository, 
+			$this->expectedName = $this->seeder->word
         );
     }
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType(%src_class%::class);
+        $this->shouldHaveType(Test::class);
     }
 
     public function it_requires_a_command_invoker()
     {
         $invoker = str_repeat(' ', mt_rand(1, 10));
         $this->shouldThrow(InvalidArgumentException::class)->during('__construct', [
-            $invoker, %spec_constructor_fields%
+            $invoker, 
+			$this->expectedName = $this->seeder->word
         ]);
     }
 
@@ -53,5 +65,16 @@ class %spec_class% extends ObjectBehavior
         $this->invoker()->shouldReturn($this->expectedInvoker);
     }
 
-    %spec_getter_tests%
+    
+    public function it_has_repository()
+    {
+        $this->repository()->shouldReturn($this->expectedRepository);
+    }
+
+
+    public function it_has_name()
+    {
+        $this->name()->shouldReturn($this->expectedName);
+    }
+
 }

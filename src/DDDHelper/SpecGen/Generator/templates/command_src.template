@@ -2,6 +2,7 @@
 namespace %src_namespace%;
 
 use InvalidArgumentException;
+%additional_dependencies%
 
 /**
  * Class %src_class%
