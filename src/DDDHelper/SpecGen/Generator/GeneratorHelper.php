@@ -23,6 +23,8 @@ trait GeneratorHelper
      */
     protected $filesystem;
 
+    protected $additionalDependencies = [];
+
     /**
      * @param Resource $resource
      * @param array $data
@@ -36,6 +38,7 @@ trait GeneratorHelper
         $eventName = $data['event_name'] ?? '';
         $command = $data['command'] ?? '';
         $class = new Cased($name);
+
         $templateVariables =
             [
                 '%event_name%' => Cased::make($eventName)->asCamelCase(),
@@ -45,6 +48,7 @@ trait GeneratorHelper
                 '%spec_class%' => $resource->getSpecName(),
                 '%spec_namespace%' => $resource->getSpecNamespace(),
                 '%spec_constructor_fields%' => $this->generateSpecConstructorDependencies($data),
+                '%spec_comma_prefixed_constructor_fields%' => $this->generateCommaPrefixedSpecConstructorDependencies($data),
                 '%spec_constructor_fields_semicolon_delimited%' =>
                     $this->generateSpecConstructorDependenciesSemiColonDelimited($data),
                 '%spec_fields%' => $this->generateSpecFields($data),
@@ -66,7 +70,9 @@ trait GeneratorHelper
                 '%src_array_to_data%' => $this->generateSrcArrayToData($data),
                 '%src_fields%' => $this->generateSrcFields($data),
 
-                '%command%' => ucfirst(Cased::make($command)->asCamelCase())
+                '%command%' => ucfirst(Cased::make($command)->asCamelCase()),
+                '%additional_dependencies%' => $this->generateAdditionalDependencies($data),
+                '%spec_before_test_dependencies%' => implode(', ', $this->additionalDependencies)
             ];
 
         $specBasePath = rtrim($resource->getSpecFilename(), $resource->getSpecName() . '.php');
@@ -307,6 +313,17 @@ trait GeneratorHelper
 
         $constructorFields = [];
         foreach ((array)$data['fields'] as $fieldName => $fieldType) {
+            $variableName = '$' . lcfirst(Cased::make($fieldName)->asCamelCase());
+            $memberVariableName = '$this->expected' . Cased::make($fieldName)->asCamelCase();
+
+            if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
+                $this->additionalDependencies[] = $fieldType . ' $' . $fieldName;
+                $constructorFields[] = "\n\t\t\t"
+                    . $memberVariableName .
+                    ' = ' . $variableName;
+                continue;
+            }
+
             $constructorFields[] = "\n\t\t\t"
                 . '$this->expected'
                 . Cased::make($fieldName)->asCamelCase()
@@ -349,10 +366,50 @@ trait GeneratorHelper
 
         $constructorFields = [];
         foreach ((array)$data['fields'] as $fieldName => $fieldType) {
-            $variableName = lcfirst(Cased::make($fieldName)->asCamelCase());
+            $variableName = '$' . lcfirst(Cased::make($fieldName)->asCamelCase());
+
+            if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
+                $constructorFields[] = "\n\t\t"
+                    . $fieldType .
+                    ' ' . $variableName;
+                continue;
+            }
+
             $constructorFields[] = "\n\t\t"
                 . $this->getFieldType($fieldType) .
-                ' $' . $variableName;
+                ' ' . $variableName;
+        }
+
+        if (count($constructorFields) > 0) {
+            return ', ' . implode(', ', $constructorFields);
+        }
+        return '';
+    }
+
+    protected function generateCommaPrefixedSpecConstructorDependencies(array $data): string
+    {
+        if (!isset($data['fields'])) {
+            return '';
+        }
+
+        $constructorFields = [];
+        foreach ((array)$data['fields'] as $fieldName => $fieldType) {
+            $variableName = '$' . lcfirst(Cased::make($fieldName)->asCamelCase());
+            $memberVariableName = '$this->expected' . Cased::make($fieldName)->asCamelCase();
+
+
+            if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
+                $constructorFields[] = "\n\t\t\t"
+                    . $memberVariableName .
+                    ' = ' . $variableName;
+                continue;
+            }
+
+
+            $constructorFields[] = "\n\t\t\t"
+                . '$this->expected' . Cased::make($fieldName)->asCamelCase()
+                . ' = $this->seeder->'
+                . $this->getSeederType($fieldType);
         }
 
         if (count($constructorFields) > 0) {
@@ -442,17 +499,7 @@ trait GeneratorHelper
      */
     protected function getFieldType(string $type): string
     {
-        switch ($type) {
-            case 'int':
-                return 'int';
-            case 'float':
-                return 'float';
-            case 'array':
-                return 'array';
-            case 'bool':
-                return 'bool';
-        }
-        return 'string';
+        return $type;
     }
 
     /**
@@ -481,5 +528,26 @@ trait GeneratorHelper
     protected function getTemplate($type)
     {
         return file_get_contents(__DIR__ . '/templates/' . $type . '.template');
+    }
+
+    private function generateAdditionalDependencies(array $data): string
+    {
+        if (!isset($data['fields'])) {
+            return '';
+        }
+
+        $additionalDependencies = [];
+        foreach ((array)$data['command'] as $fieldName => $fieldType) {
+            if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
+                $additionalDependencies[] = 'use ' . $fieldType . ';';
+            }
+        }
+
+        foreach ((array)$data['fields'] as $fieldName => $fieldType) {
+            if (!in_array($fieldType, ['int', 'string', 'bool', 'float', 'array'])) {
+                $additionalDependencies[] = 'use ' . $fieldType . ';';
+            }
+        }
+        return implode("\n", $additionalDependencies);
     }
 }

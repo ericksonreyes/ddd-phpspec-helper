@@ -6,6 +6,7 @@ use Faker\Factory;
 use Faker\Generator;
 use PhpSpec\ObjectBehavior;
 use InvalidArgumentException;
+%additional_dependencies%
 
 class %spec_class% extends ObjectBehavior
 {
@@ -21,7 +22,7 @@ class %spec_class% extends ObjectBehavior
         $this->seeder = Factory::create();
     }
 
-    public function let()
+    public function let(%spec_before_test_dependencies%)
     {
         $this->beConstructedWith(
             %spec_constructor_fields%

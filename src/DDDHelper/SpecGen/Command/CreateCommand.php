@@ -44,6 +44,7 @@ class CreateCommand extends Command
                 break;
             }
 
+            $propertyName = addslashes($propertyName);
             $propertyType = $this->choose(
                 $input,
                 $output,
@@ -53,10 +54,25 @@ class CreateCommand extends Command
                     'int',
                     'float',
                     'array',
-                    'bool'
+                    'bool',
+                    'class'
                 ]
             );
+
             $arguments['fields'][$propertyName] = $propertyType;
+
+            if ($propertyType === 'class') {
+                while (true) {
+                    $className = $this->ask($input, $output, 'Enter class or interface fully qualified name ' .
+                        '(Ex.: MyVendor\\MyProject\\MyClass): ', '');
+
+                    if ($className) {
+                        $className = str_replace('/', '\\', $className);
+                        $arguments['fields'][$propertyName] = $className;
+                        break;
+                    }
+                }
+            }
         }
         return $arguments;
     }
