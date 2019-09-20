@@ -12,7 +12,7 @@ PhpSpec helper for generating domain event and entity specification and implemen
 
 ## How to install
 ```bash
-composer require ericksonreyes/domain-driven-design
+composer require ericksonreyes/ddd-phpspec-helper
 ```
 
 ## How to use
